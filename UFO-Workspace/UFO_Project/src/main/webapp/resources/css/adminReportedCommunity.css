@@ -1,0 +1,120 @@
+.wrap {
+   background-color: rgb(23, 26, 33);
+    color : white;
+    height : 2000px;
+}
+
+#content_container {
+    margin-left : 8%;
+    margin-right : 8%;
+}
+#content_container a {
+    text-decoration: none;
+    color: gray;
+}
+
+/* 관리자 프로필 효과 */
+#admin_profile {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+/* 관리탭 효과 */
+#admin_mypage_navi>div {
+    display: inline-block;
+    width: 16%;
+    margin-top: 25px;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+}
+#admin_mypage_navi {
+    border-bottom: 1px solid gray;
+}
+/*
+#admin_mypage_navi>div:active {
+    border-bottom:3px solid #64FFDA;
+}
+*/
+#admin_mypage_navi a:hover {
+    color: white;
+}
+#selected_tab {
+    border-bottom:3px solid #64FFDA;
+}
+#selected_tab a {
+    color: white;
+    font-weight: bold;
+}
+
+/*------------- 개별 구현 영역 -------------*/
+#communityManagementArea {
+    text-align : center;
+}
+
+#reportCategory {
+    width : 90%;
+    margin : auto;
+}
+
+/* 테이블을 감싼 div */
+#communityListAll {
+    width : 100%;
+}
+
+/* 커뮤니티 테이블 영역 */
+#communityTable {
+    width : 90%;
+    margin : auto;
+    text-align : center;
+}
+
+#community_head {
+    height : 80px;
+    vertical-align: center;
+    font-size : 20px;
+}
+
+.line {
+    border-bottom: 3px solid rgb(34, 34, 34);
+    border-radius: 10px;
+}
+
+.community_head1 {
+    text-align : center;
+}
+
+.personalCommunity {
+    height : 50px;
+}
+
+/* 리스트 글제목 포인터 */
+#community_Title {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+/* 삭제 버튼 */
+.btn-danger {
+    color :rgb(23, 26, 33);
+}
+
+
+/* 페이징 처리 */
+#pagingArea {
+    width : 1000px;
+    margin : auto;
+    text-align: center;
+}
+
+#pagingArea>button {
+    background-color: #64ffda;
+    border-radius : 5px;
+    margin-left : 5px;
+    margin-right : 5px;
+    width : 40px;
+    height : 40px;
+    /* opacity : 40%; */
+    cursor: pointer;
+}
+ 

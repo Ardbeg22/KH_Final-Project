@@ -64,7 +64,7 @@
     }
 	#main { width: 100%; height: 100%; }
 
-    #notice { /* 글작성, 버튼을 감싸고 있는 div */
+    #community { /* 글작성, 버튼을 감싸고 있는 div */
         width: 100%;
         height: 100%;
         margin: auto;
@@ -124,25 +124,27 @@
 	    	<!-- !!! 본인이 맡은 탭 div에 id="selected_tab" 붙어녛기 !!!-->
         
 
-            <div class="notice">
+            <div class="community">
 
 			<br><br><br>
 			
 					<div id="main">
                         <div id="notice">
-                            <form id="enroll-form" action="noticeEnroll.no" method="post">
+                            <form id="enroll-form" action="communityEnroll.co" method="post">
                                 <table align="center">
                                     <tr>
                                         <th>제목</th>
-                                        <td><input type="text" id="noticeTitle" name="noticeTitle" class="form-control" maxlength="33" required></td>
+                                        <td><input type="text" id="comTitle" name="comTitle" class="form-control" maxlength="33" required></td>
                                     </tr>
 
                                     <br>
-
+									<tr>
+                        				<td><input type="hidden" id="userNo" class="form-control" value="${ loginUser.userNo }" name="userNo"></td>
+                   				   </tr>
                                     <tr>
                                         <th>내용</th>
                                         <td>
-                                            <textarea name="noticeContent" id="noticeContent" class="form-control" rows="19" required style="resize:none"></textarea>
+                                            <textarea name="comContent" id="comContent" class="form-control" rows="19" required style="resize:none"></textarea>
                                         </td>
                                     </tr>
                                 </table>

@@ -1,18 +1,16 @@
 package com.urfavoriteott.ufo.member.model.dao;
 
-import java.util.HashMap;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Component;
 
 import com.urfavoriteott.ufo.common.model.vo.PageInfo;
+import com.urfavoriteott.ufo.community.model.vo.Community;
 import com.urfavoriteott.ufo.contents.model.vo.Payment;
 import com.urfavoriteott.ufo.contents.model.vo.Review;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Component;
 import com.urfavoriteott.ufo.member.model.vo.Member;
 
 
@@ -184,5 +182,79 @@ public class MemberDao {
 
 	public Payment payChecker(SqlSessionTemplate sqlSession, Member loginUser) {
 		return sqlSession.selectOne("memberMapper.payChecker",loginUser);
+	}
+	
+	/**
+	 * 마이 페이지 커뮤니티 내가 쓴 글 개수 구하는 메소드 - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @param userNo
+	 * @return
+	 */
+	public int selectMyCommunityListCount(SqlSessionTemplate sqlSession, int userNo) {
+		
+		return sqlSession.selectOne("memberMapper.selectMyCommunityListCount", userNo);
+	}
+
+	/**
+	 * 마이 페이지 커뮤니티 내가 쓴 글 전체 조회 - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @param pi
+	 * @param userNo
+	 * @return
+	 */
+	public ArrayList<Community> selectMyCommunityList(SqlSessionTemplate sqlSession, PageInfo pi, int userNo) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+      
+		RowBounds rowBounds = new RowBounds(offset, limit);		
+		
+		return (ArrayList)sqlSession.selectList("memberMapper.selectMyCommunityList", userNo, rowBounds);
+	}
+	
+	/**
+	 * 마이페이지 커뮤니티 글 내역 중 선택된 글 삭제 - 작성자: 황혜진 
+	 * @param sqlSession
+	 * @param checkNum
+	 * @return
+	 */
+	public int deleteMyCommunity(SqlSessionTemplate sqlSession, int checkNum) {
+		return sqlSession.update("memberMapper.deleteMyCommunity", checkNum);
+	}
+
+	/**
+	 *  마이 페이지 커뮤니티 내가 쓴 댓글 개수 구하는 메소드  - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @param userNo
+	 * @return
+	 */
+	public int selectMyCommunityReplyListCount(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("memberMapper.selectMyCommunityReplyListCount", userNo);
+	}
+
+	/**
+	 * 마이 페이지 커뮤니티 내가 쓴 댓글 전체 조회 - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @param pi
+	 * @param userNo
+	 * @return
+	 */
+	public ArrayList<Community> selectMyCommunityReplyList(SqlSessionTemplate sqlSession, PageInfo pi, int userNo) {
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+      
+		RowBounds rowBounds = new RowBounds(offset, limit);		
+		
+		return (ArrayList)sqlSession.selectList("memberMapper.selectMyCommunityReplyList", userNo, rowBounds);
+	}
+
+	/**
+	 * 마이 페이지 댓글 내역 중 선택된 댓글 삭제 - 작성자: 황혜진
+	 * @param sqlSession
+	 * @param checkNum
+	 * @return
+	 */
+	public int deleteMyCommunityReply(SqlSessionTemplate sqlSession, int checkNum) {
+		return sqlSession.update("memberMapper.deleteMyCommunityReply", checkNum);
 	}
 }

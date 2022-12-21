@@ -3,6 +3,7 @@ package com.urfavoriteott.ufo.member.model.service;
 import java.util.ArrayList;
 
 import com.urfavoriteott.ufo.common.model.vo.PageInfo;
+import com.urfavoriteott.ufo.community.model.vo.Community;
 import com.urfavoriteott.ufo.contents.model.vo.Payment;
 import com.urfavoriteott.ufo.contents.model.vo.Review;
 import com.urfavoriteott.ufo.member.model.vo.Member;
@@ -110,4 +111,48 @@ public interface MemberService {
 	ArrayList<Payment> selectMyPaymentList(PageInfo pi, int loginUserNo);
 
 	Payment payChecker(Member loginUser);
+	
+	/**
+	 * 마이 페이지 커뮤니티 내가 쓴 글 총 개수 구하는 메소드 - 작성자 : 황혜진
+	 * @param userNo
+	 * @return
+	 */
+	int selectMyCommunityListCount(int userNo);
+
+	/**
+	 * 마이 페이지 커뮤니티 내가 쓴 글 전체 조회 - 작성자 : 황혜진
+	 * @param pi
+	 * @param userNo 
+	 * @return
+	 */
+	ArrayList<Community> selectMyCommunityList(PageInfo pi, int userNo);
+
+	/**
+	 * 마이 페이지 커뮤니티 글 내역 중 선택된 글 삭제 - 작성자: 황혜진 
+	 * @param checkNum : 선택된 글번호 
+	 * @return
+	 */
+	int deleteMyCommunity(int checkNum);
+
+	/**
+	 *  마이 페이지 커뮤니티 내가 쓴 댓글 개수 구하는 메소드  - 작성자 : 황혜진
+	 * @param userNo
+	 * @return
+	 */
+	int selectMyCommunityReplyListCount(int userNo);
+
+	/**
+	 * 마이 페이지 커뮤니티 내가 쓴 댓글 전체 조회 - 작성자 : 황혜진
+	 * @param pi
+	 * @param userNo
+	 * @return
+	 */
+	ArrayList<Community> selectMyCommunityReplyList(PageInfo pi, int userNo);
+
+	/**
+	 * 마이 페이지 댓글 내역 중 선택된 댓글 삭제 - 작성자: 황혜진
+	 * @param checkNum : 선택된 댓글 번호 
+	 * @return
+	 */
+	int deleteMyCommunityReply(int checkNum); 
 }

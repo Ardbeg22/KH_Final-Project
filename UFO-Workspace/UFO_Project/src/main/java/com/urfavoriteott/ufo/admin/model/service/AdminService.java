@@ -253,5 +253,58 @@ public interface AdminService {
 	 */
 	ArrayList<Payment> selectAdminPaymentList(PageInfo pi);
 	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진
+	 * @return
+	 */
+	int reportedCommunityListCount();
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 조회 - 작성자 : 황혜진
+	 * @param pi
+	 * @return
+	 */
+	ArrayList<Report> reportedCommunityList(PageInfo pi);
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(REPORT_STATUS='Y') 하는 메소드 - 작성자: 황혜진 
+	 * @param reportNo
+	 * @return
+	 */
+	int changeStatusReportedCommunity(int reportNo);
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(COM_STATUS='N') 하는 메소드 - 작성자: 황혜진
+	 * @param comNo
+	 * @return
+	 */
+	int deleteReportedCommunity(int comNo);
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진
+	 * @return
+	 */
+	int processedCommunityListCount();
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 조회 - 작성자 : 황혜진
+	 * @param pi
+	 * @return
+	 */
+	ArrayList<Report> processedCommunityList(PageInfo pi);
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 게시글 되돌리기 (REPORT_STATUS='N') 메소드 - 작성자: 황혜진 
+	 * @param reportNo
+	 * @return
+	 */
+	int resetStatusReportedCommunity(int reportNo);
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 게시글 삭제 상태 되돌리기 (COM_STATUS='Y') 메소드 - 작성자: 황혜진
+	 * @param comNo
+	 * @return
+	 */
+	int resetReportedCommunity(int comNo);
 
 }

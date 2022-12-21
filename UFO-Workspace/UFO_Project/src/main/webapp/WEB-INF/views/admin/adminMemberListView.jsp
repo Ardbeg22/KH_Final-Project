@@ -147,7 +147,7 @@
 		        <div><a href="">콘텐츠 관리</a></div>
 		        <div><a href="commentList.ad">코멘트 관리</a></div>
 		        <div><a href="adminPaymentList.ad">이용권 관리</a></div>       
-		        <div><a href="reportedReply.ad">신고 관리</a></div>
+		        <div><a href="reportedCommunity.ad">신고 관리</a></div>
 		        <div><a href="admin_stat.st">통계 관리</a></div>
 			</div>
 			

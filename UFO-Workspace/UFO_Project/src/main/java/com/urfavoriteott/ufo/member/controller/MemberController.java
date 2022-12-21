@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.urfavoriteott.ufo.common.model.vo.PageInfo;
 import com.urfavoriteott.ufo.common.template.Pagination;
+import com.urfavoriteott.ufo.community.model.vo.Community;
 import com.urfavoriteott.ufo.contents.model.vo.Payment;
 import com.urfavoriteott.ufo.contents.model.vo.Review;
 import com.urfavoriteott.ufo.member.model.service.MemberService;
@@ -512,5 +513,105 @@ public class MemberController {
 		mv.setViewName("member/myPayment");
 		
 		return mv;
+	}
+	
+	/**
+	 * 마이페이지 커뮤니티 리스트 조회 메소드 - 작성자 : 황혜진
+	 * @param currentPage
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("myCommunityList.me")
+	public String selectMyCommunityList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, HttpSession session) {
+
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+	
+		int listCount = memberService.selectMyCommunityListCount(userNo);
+		
+		int pageLimit = 10;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList<Community> list = memberService.selectMyCommunityList(pi, userNo);
+		
+	    model.addAttribute("pi", pi);
+	    model.addAttribute("list", list);
+	    
+	    // System.out.println(list);
+	    return "member/myCommunity";
+	}
+	
+	/**
+	 * 마이 페이지 커뮤니티 글 내역에서 선택된 글 삭제 메소드 - 작성자: 황혜진
+	 * @param communityNoArr
+	 * @return 
+	 */
+	@ResponseBody
+	@RequestMapping(value="deleteCommunity.me", produces="application/json; charset=UTF-8")
+	public int deleteMyCommunity(@RequestParam(value="communityNoArr[]") List<String> communityNoArr) {
+		
+		// System.out.println(communityNoArr); // 체크박스에 담긴 게시글 번호가 [4, 3] 와 같이 찍힘
+		
+		int result = 0;
+		int checkNum = 0; // 글번호는 1부터 시작함
+		
+		for(String str : communityNoArr) {
+			checkNum = Integer.parseInt(str);
+			// System.out.println(checkNum); // 4, 3이 차례로 찍힘
+			memberService.deleteMyCommunity(checkNum);
+			result++;
+		}
+		return result;
+	}
+	
+	/**
+	 * 마이페이지 댓글 리스트 조회 메소드 - 작성자 : 황혜진
+	 * @param currentPage
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("myCommunityReplyList.me")
+	public String selectMyCommunityReplyList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model, HttpSession session) {
+
+		int userNo = ((Member)session.getAttribute("loginUser")).getUserNo();
+	
+		int listCount = memberService.selectMyCommunityReplyListCount(userNo);
+		
+		int pageLimit = 10;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList<Community> list = memberService.selectMyCommunityReplyList(pi, userNo);
+		
+	    model.addAttribute("pi", pi);
+	    model.addAttribute("list", list);
+	    
+	    // System.out.println(list);
+	    return "member/myCommunityReply";
+	}
+	
+	/**
+	 * 마이페이지 댓글 삭제 메소드  - 작성자 : 황혜진
+	 * @param communityReplyNoArr
+	 * @return 
+	 */
+	@ResponseBody
+	@RequestMapping(value="deleteCommunityReply.me", produces="application/json; charset=UTF-8")
+	public int deleteMyCommunityReply(@RequestParam(value="communityReplyNoArr[]") List<String> communityReplyNoArr) {
+		
+		// System.out.println(communityReplyNoArr); // 체크박스에 담긴 댓글 번호가 [4, 3] 와 같이 찍힘
+		
+		int result = 0;
+		int checkNum = 0; // 댓글번호는 1부터 시작함
+		
+		for(String str : communityReplyNoArr) {
+			checkNum = Integer.parseInt(str);
+			// System.out.println(checkNum); // 4, 3이 차례로 찍힘
+			memberService.deleteMyCommunityReply(checkNum);
+			result++;
+		}
+		return result;
 	}
 }

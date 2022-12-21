@@ -420,4 +420,92 @@ public class AdminDao {
 		return (ArrayList)sqlSession.selectList("adminMapper.selectAdminPaymentList",null, rowBounds);
 	}
 
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @return
+	 */
+	public int reportedCommunityListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("adminMapper.reportedCommunityListCount");
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 조회 - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @param pi
+	 * @return
+	 */
+	public ArrayList<Report> reportedCommunityList(SqlSessionTemplate sqlSession, PageInfo pi) {
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() -1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("adminMapper.reportedCommunityList", null, rowBounds);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(REPORT_STATUS='Y') 하는 메소드 - 작성자: 황혜진 
+	 * @param sqlSession
+	 * @param reportNo
+	 * @return
+	 */
+	public int changeStatusReportedCommunity(SqlSessionTemplate sqlSession, int reportNo) {
+		return sqlSession.update("adminMapper.changeStatusReportedCommunity", reportNo);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(COM_STATUS='N') 하는 메소드 - 작성자: 황혜진
+	 * @param sqlSession
+	 * @param comNo
+	 * @return
+	 */
+	public int deleteReportedCommunity(SqlSessionTemplate sqlSession, int comNo) {
+		return sqlSession.update("adminMapper.deleteReportedCommunity", comNo);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @return
+	 */
+	public int processedCommunityListCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("adminMapper.processedCommunityListCount");
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 조회 - 작성자 : 황혜진
+	 * @param sqlSession
+	 * @param pi
+	 * @return
+	 */
+	public ArrayList<Report> processedCommunityList(SqlSessionTemplate sqlSession, PageInfo pi) {
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() -1) * limit;
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return (ArrayList)sqlSession.selectList("adminMapper.processedCommunityList", null, rowBounds);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 게시글 되돌리기 (REPORT_STATUS='N') 메소드 - 작성자: 황혜진 
+	 * @param sqlSession
+	 * @param reportNo
+	 * @return
+	 */
+	public int resetStatusReportedCommunity(SqlSessionTemplate sqlSession, int reportNo) {
+		return sqlSession.update("adminMapper.resetStatusReportedCommunity", reportNo);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 게시글 삭제 상태 되돌리기 (COM_STATUS='Y') 메소드 - 작성자: 황혜진
+	 * @param sqlSession
+	 * @param comNo
+	 * @return
+	 */
+	public int resetReportedCommunity(SqlSessionTemplate sqlSession, int comNo) {
+		return sqlSession.update("adminMapper.resetReportedCommunity", comNo);
+	}
 }

@@ -26,4 +26,6 @@ public class CommunityReply {
     private String reportReason;
     private Date reportDate;
     private String reportStatus;
+    private int reportNo;
+    private String userId;
 }

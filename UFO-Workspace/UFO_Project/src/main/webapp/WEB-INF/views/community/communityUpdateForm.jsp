@@ -18,58 +18,82 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- CSS 스타일시트 -->
-    <link rel="stylesheet" href="resources/css/noticeCss.css">
-
 <style>
-    #news-full{ /* 전체 요소를 담고 있는 div */
-        width: 80%;
+
+	#content_container {
+		margin-left : 8%;
+		margin-right : 8%;
+	}
+    #content_container a {
+    	text-decoration: none;
+    	color: gray;
+    }
+    
+    /* 관리자 프로필 효과 */
+	#admin_profile {
+		margin-top: 2%;
+		margin-bottom: 2%;
+	}
+	
+	/* 관리탭 효과 */
+    #admin_mypage_navi>div {
+    	display: inline-block;
+    	width: 19.7%;
+    	margin-top: 25px;
+    	font-size: 20px;
+    	padding: 10px;
+		text-align: center;
+    }
+    #admin_mypage_navi {
+    	border-bottom: 1px solid gray;
+    }
+    /*
+    #admin_mypage_navi>div:active {
+    	border-bottom:3px solid #64FFDA;
+    }
+    */
+    #admin_mypage_navi a:hover {
+    	color: white;
+    }
+    #selected_tab {
+    	border-bottom:3px solid #64FFDA;
+    }
+    #selected_tab a {
+    	color: white;
+    	font-weight: bold;
+    }
+	#main { width: 100%; height: 100%; }
+
+    #community { /* 글작성, 버튼을 감싸고 있는 div */
+        width: 100%;
         height: 100%;
         margin: auto;
-        border: solid white;
-        border-radius: 45px; 
     }
 
-    #news-title{ /* 제목을 담고 있는 div Id */
+	#enroll-form { width: 100%; height: 100%; }
+
+    #enroll-form>table { /* 게시판 */
         width: 100%;
-        height: 15%;
-    }
-
-    #news-title1 { width: 100%; height: 60%; float: left; }
-    #news-title2 { width: 100%; height: 20%; float: left; }
-
-
-    #news-content { /* 뉴스 기사를 담고 있는 div Id */
-        width: 100%;
-        height: 85%;
-    }
-
-    #news-content-sm { /* #news-content안의 뉴스 기사만 담을 수 있는 div */
-        width: 75%;
-        height: 100%;
-        margin: auto;
-        padding-top: 50px;
-        font-size: 20px;
-        word-spacing: 7px;
-        letter-spacing: 1px;
-    }
-
-    #news-title1>p {  /* 뉴스 제목 글씨와 관련된 CSS */
-        width: 100%;
-        height: 100%;
-        font-size: 40px;
+        height: 90%;
+        border-collapse: separate;
+	    border-spacing: 0 20px;
         text-align: center;
-        line-height: 135px;
     }
 
-    #news-title2>p { /* 작성일 & 조회수 글씨와 관련된 CSS */
+	table th { width: 10%; font-size: 15px; }
+
+	#btns { height: 10%;}
+
+    #enroll-form>table input, #enroll-form>table textarea { /* 제목과 내용을 입력할 칸 */
         width: 100%;
-        height: 100%;
-        text-align: left;
-        font-size: medium;
-        margin-left: 50px;
-        margin-top: 30px;
+        box-sizing: border-box;
     }
+
+    input[type=text] { /* 제목을 입력할 칸 */
+        height: 35px;
+    }
+    
+
 </style>
 </head>
 
@@ -78,54 +102,81 @@
     <!-- 전체 영역 -->
     <div class="wrap">
 
-     <!-- 플로팅 버튼 영역 -->
+		<!-- 플로팅 버튼 영역 -->
         <jsp:include page="../common/floatingButton.jsp" />
 
-        <!-- 헤더 영역 -->
+		<!-- 헤더 영역 -->
         <jsp:include page="../common/header.jsp" />
 
-      
+		
         <!-- 컨텐츠 영역 (개별 구현 구역) -->
         <div id="content_container">
+        
+        <table id="admin_profile">
+	        <tr>
+	            <td width="380" height="20"></td>
+	        </tr>
+	        <tr>
+	            <td width="380" style="font-size:50px; font-weight:900;">커뮤니티</td>
+	        </tr>
+	    </table>
+	    	
+	    	<!-- !!! 본인이 맡은 탭 div에 id="selected_tab" 붙어녛기 !!!-->
+        
 
-            <!-- 최신 게임 -->
-            <br><br><br><br><br><br><br><br>
-            <div class="notice">
-                            <!-- 공지사항 게시글 틀 시작 -->
-                       <div id="news-full">
-                          <div id="news-title">
-                                    <div id="news-title1">
-                                       <p>인생 영화 등극</p>
-                                    </div>
-                                    <div id="news-title2">
-                                        <p>작성일 : 2022-05-10 &emsp;|&emsp; 작성자 : 황혜진  &emsp;|&emsp; 조회수 : 100</p>
-                                    </div>
-                           
-                                    <div class="form-button" style="margin-left: 1300px;">
-                                    <a href="" class="btn btn-warning">수정</a>
-                                    <a href="" class="btn btn-danger">삭제</a>
-                                    <a href="" class="btn btn-info">목록</a>
-                                    </div>
-                          </div>
+            <div class="community">
 
-                                <hr style="background:white; height:1px; border:0;">
+			<br><br><br>
+			
+					<div id="main">
+                        <div id="notice">
+                            <form id="enroll-form" action="communityUpdate.co" method="post">
+                                <table align="center">
+                                    <tr>
+                                        <th>제목</th>
+                                        <td>
+                                        <input type="text" id="comTitle" name="comTitle" class="form-control" value="${ c.comTitle }" maxlength="33" required>
+                                        <input type="hidden" id="comNo" name="comNo" class="form-control" value="${ c.comNo }">
+                                        </td>
+                                        
+                                    </tr>
 
-                          <div id="news-content" style="height:800px;">
-                              <div id="news-content-sm" style="border: 1px solid red;">
-                                        <p>
-                                               무조건 보세요 두 번 보세요 전 내일 또 볼 거예요
-                                               <br>
-                                               안 보면 후회함
-                                        </p>
-                              </div>
-                          </div>
-                      </div>
-                            <!-- 공지사항 게시글 틀 종료 -->
+                                    <br>
+									<tr>
+                        				<td><input type="hidden" id="userNo" class="form-control" value="${ loginUser.userNo }" name="userNo"></td>
+                   				   </tr>
+                                    <tr>
+                                        <th>내용</th>
+                                        <td>
+                                            <textarea name="comContent" id="comContent" class="form-control" rows="19" required style="resize:none">${c.comContent}</textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div id="btns"> <!-- margin-left:1100px  -->
+                                    <button type="submit" class="btn btn-info" style="margin-left:800px">수정하기</button>
+					                <button type="button" class="btn btn-secondary" onclick="history.back();">뒤로가기</button>
+					                <!-- history.back() : 이전 페이지로 돌아가게 해주는 함수 -->
+                                </div>
+                    
+                            </form>
+                        </div>
+                    </div> 
            </div>
-        </div>
+           
 
-      <!-- 푸터 영역 -->
+        </div>
+        
+
+		<!-- 푸터 영역 -->
         <jsp:include page="../common/footer.jsp" />
+
     </div>
+    
+    
+
+  
+    
+
 </body>
 </html>

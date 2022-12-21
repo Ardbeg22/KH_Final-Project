@@ -1,0 +1,114 @@
+@charset "UTF-8";.wrap {
+    background-color: rgb(23, 26, 33);
+    color : white;
+    height : 2000px;
+}
+
+#content_container {
+    margin-left : 8%;
+    margin-right : 8%;
+}
+#content_container a {
+    text-decoration: none;
+    color: gray;
+}
+
+/* 회원 프로필 효과 */
+#user_profile {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+#subscribe_tab {
+    background-color: #3b3a40;
+    height: 70px;
+    text-align: center;
+    line-height: 70px;
+}
+
+/* 마이페이지 탭 효과 */
+#mypage_navi>div {
+    display: inline-block;
+    width: 16.4%;
+    margin-top: 25px;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+}
+#mypage_navi {
+    border-bottom: 1px solid gray;
+}
+/*
+#mypage_navi>div:active {
+    border-bottom:3px solid #64FFDA;
+}
+*/
+#mypage_navi a:hover {
+    color: white;
+}
+#selected_tab {
+    border-bottom:3px solid #64FFDA;
+}
+#selected_tab a {
+    color: white;
+    font-weight: bold;
+}
+
+/* 회원 프로필, 비밀번호변경 버튼 효과 */
+#user_profile button, #pwd_btn {
+    border: 1px solid gray;
+    background-color: rgb(23, 26, 33);
+    color: gray;
+    height: 30px;
+    font-size: 17px;
+}
+#user_profile button:hover, #pwd_btn:hover {
+    background-color: #64FFDA;
+    border: 1px solid #64FFDA;
+}
+
+/* 콘텐츠 영역 */
+#myCommunityTable {
+    width : 90%;
+    margin : auto;
+    text-align : center;
+}
+
+#comTitle {
+	opacity: 0.7;
+    cursor: pointer;
+}
+
+#community_head {
+    height : 80px;
+    vertical-align: center;
+    font-size : 20px;
+}
+
+.line {
+    border-bottom: 3px solid rgb(34, 34, 34);
+    border-radius: 10px;
+}
+
+.community_head1 {
+    text-align : center;
+}
+
+.personalCommunity {
+    height : 50px;
+}
+
+  /* 페이징 처리 */
+  #pagingArea {
+    text-align: center;
+  }
+
+  #pagingArea>button {
+    background-color: #64ffda;
+    border-radius : 5px;
+    margin-left : 5px;
+    margin-right : 5px;
+    width : 40px;
+    height : 40px;
+    /* opacity : 40%; */
+    cursor: pointer;
+  }

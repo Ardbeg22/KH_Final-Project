@@ -51,6 +51,24 @@
 		<result column="PAY_URL" property="payUrl" />
 	</resultMap>
 		
+	<!-- COMMUNITY 테이블로부터 조회된 내용을 community 타입으로 가공해주는 ResultMap - 작성자: 황혜진 -->
+	<resultMap id="communityResultSet" type="community">
+		<result column="COM_NO" property="comNo" />
+		<result column="COM_TITLE" property="comTitle" />
+		<result column="COM_CONTENT" property="comContent" />
+		<result column="COM_REGISTER_DATE" property="comRegisterDate" />
+		<result column="COM_HIT" property="comHit" />
+		<result column="COM_STATUS" property="comStatus" />
+		
+		<result column="USER_NICKNAME" property="userNickname" />
+		<result column="USER_NO" property="userNo" />
+		<result column="REPORT_NO" property="reportNo" />
+		<result column="REPORT_REASON" property="reportReason" />
+		<result column="REPORT_DATE" property="reportDate" />
+		<result column="REPORT_STATUS" property="reportStatus" />
+		<result column="USER_ID" property="userId" />
+	</resultMap>	
+	
 	<!-- COMMUNITY_REPLY 테이블로부터 조회된 내용을 communityReply 타입으로 가공해주는 ResultMap - 작성자: 황혜진 -->
 	<resultMap id="replyResultSet" type="communityReply">
 		<result column="COM_RPL_NO" property="comRplNo" />
@@ -58,12 +76,14 @@
 		<result column="COM_RPL_CONTENT" property="comRplContent" />
 		<result column="COM_RPL_REGISTER_DATE" property="comRplRegisterDate" />
 		<result column="COM_RPL_STATUS" property="comRplStatus" />
+		
 		<result column="USER_NICKNAME" property="userNickname" />
 		<result column="USER_NO" property="userNo" />
 		<result column="REPORT_NO" property="reportNo" />
 		<result column="REPORT_REASON" property="reportReason" />
 		<result column="REPORT_DATE" property="reportDate" />
 		<result column="REPORT_STATUS" property="reportStatus" />
+		<result column="USER_ID" property="userId" />
 	</resultMap>
 
 	<!-- 정기결제 resultSet -->
@@ -442,4 +462,79 @@
 		WHERE COM_RPL_NO = #{comRplNo}
 	</update>
 
+	<!-- 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진 -->
+	<select id="reportedCommunityListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT
+		WHERE REPORT_STATUS = 'N'
+	</select>
+	
+	<!-- 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 조회 - 작성자 : 황혜진 -->
+	<select id="reportedCommunityList" resultMap="communityResultSet">
+		SELECT M.USER_ID
+			 , REPORT_NO
+		     , COM_NO
+		     , COM_REGISTER_DATE
+		     , COM_TITLE
+		     , REPORT_REASON
+		     , REPORT_STATUS
+		FROM REPORT RP
+		LEFT JOIN COMMUNITY C USING (COM_NO)
+		LEFT JOIN MEMBER M ON (M.USER_NO = RP.USER_NO)
+		WHERE REPORT_STATUS = 'N'
+		  AND COM_STATUS = 'Y'
+		ORDER BY REPORT_DATE DESC
+	</select>
+	
+	<!-- 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(REPORT_STATUS='Y') 하는 메소드 - 작성자: 황혜진  -->
+	<update id="changeStatusReportedCommunity" parameterType="_int">
+		UPDATE REPORT
+		   SET REPORT_STATUS = 'Y'
+		WHERE REPORT_NO = #{reportNo}
+	</update>
+	
+	<!-- 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(COM_STATUS='N') 하는 메소드 - 작성자: 황혜진 -->
+	<update id="deleteReportedCommunity" parameterType="_int">
+		UPDATE COMMUNITY
+		   SET COM_STATUS = 'N'
+		WHERE COM_NO = #{comNo}
+	</update>
+
+	<!-- 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진 -->
+	<select id="processedCommunityListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT
+		WHERE REPORT_STATUS = 'Y'
+	</select>
+	
+	<!-- 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 조회 - 작성자 : 황혜진 -->
+	<select id="processedCommunityList" resultMap="communityResultSet">
+		SELECT M.USER_ID
+			 , REPORT_NO
+		     , COM_NO
+		     , COM_REGISTER_DATE
+		     , COM_TITLE
+		     , REPORT_REASON
+		     , REPORT_STATUS
+		FROM REPORT RP
+		LEFT JOIN COMMUNITY C USING (COM_NO)
+		LEFT JOIN MEMBER M ON (M.USER_NO = RP.USER_NO)
+		WHERE REPORT_STATUS = 'Y'
+		  AND COM_STATUS = 'N'
+		ORDER BY REPORT_DATE DESC
+	</select>
+
+	<!-- 관리자 페이지 신고 관리 - 신고된 게시글 되돌리기 (REPORT_STATUS='N') 메소드 - 작성자: 황혜진  -->
+	<update id="resetStatusReportedCommunity" parameterType="_int">
+		UPDATE REPORT
+		   SET REPORT_STATUS = 'N'
+		WHERE REPORT_NO = #{reportNo}
+	</update>
+	
+	<!-- 관리자 페이지 신고 관리 - 신고된 게시글 삭제 상태 되돌리기 (COM_STATUS='Y') 메소드 - 작성자: 황혜진 -->
+	<update id="resetReportedCommunity" parameterType="_int">
+		UPDATE COMMUNITY
+		   SET COM_STATUS = 'Y'
+		WHERE COM_NO = #{comNo}
+	</update>
 </mapper>

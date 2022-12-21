@@ -10,8 +10,12 @@
 		<result column="COM_REGISTER_DATE" property="comRegisterDate" />
 		<result column="COM_HIT" property="comHit" />
 		<result column="COM_STATUS" property="comStatus" />
+		
 		<result column="USER_NICKNAME" property="userNickname" />
 		<result column="USER_NO" property="userNo" />
+		<result column="REPORT_REASON" property="reportReason" />
+		<result column="REPORT_DATE" property="reportDate" />
+		<result column="REPORT_STATUS" property="reportStatus" />
 	</resultMap>	
 	
 	<!-- COMMUNITY_REPLY 테이블로부터 조회된 내용을 communityReply 타입으로 가공해주는 ResultMap -->
@@ -21,7 +25,20 @@
 		<result column="COM_RPL_CONTENT" property="comRplContent" />
 		<result column="COM_RPL_REGISTER_DATE" property="comRplRegisterDate" />
 		<result column="COM_RPL_STATUS" property="comRplStatus" />
+		
 		<result column="USER_NICKNAME" property="userNickname" />
+		<result column="USER_NO" property="userNo" />
+		<result column="REPORT_REASON" property="reportReason" />
+		<result column="REPORT_DATE" property="reportDate" />
+		<result column="REPORT_STATUS" property="reportStatus" />
+	</resultMap>
+	
+	<!-- 신고 관련 resultSet, 작성자: 황혜진 -->
+	<resultMap id="reportResultSet" type="report">
+		<result column="REPORT_NO" property="reportNo" />
+		<result column="COM_NO" property="comNo" />
+		<result column="COM_ID" property="comId" />
+		<result column="COM_RPL_NO" property="comRplNo" />
 		<result column="USER_NO" property="userNo" />
 		<result column="REPORT_REASON" property="reportReason" />
 		<result column="REPORT_DATE" property="reportDate" />
@@ -45,17 +62,58 @@
 		FROM COMMUNITY C
 		LEFT JOIN MEMBER MB USING(USER_NO)
 		WHERE C.COM_STATUS = 'Y'
-		ORDER BY COM_NO DESC;
+		ORDER BY COM_NO DESC
 	</select>
+	
+	<!-- 검색된 커뮤니티 게시글 수 확인 쿼리문  -->
+	<select id="selectSearchCommCount" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+		  FROM COMMUNITY
+		 WHERE 
+		 <if test="condition == 'title'">
+		 	COM_TITLE LIKE '%' || #{searchword} || '%'
+		 </if>
+		 <if test="condition == 'content'">
+		 	COM_CONTENT LIKE '%' || #{searchword} || '%'
+		 </if>
+         <if test="condition == 'titleContent'">
+		 	COM_TITLE LIKE '%' || #{searchword} || '%' OR COM_CONTENT LIKE '%' || #{searchword} || '%'
+		 </if>
+	</select>
+	
+	<!-- 검색된 커뮤니티 게시글 리스트 전체 조회 쿼리문 -->
+	<select id="selectSearchCommList" parameterType="hashmap" resultMap="communityResultSet">
+		SELECT COM_NO
+		     , COM_TITLE
+		     , TO_CHAR(COM_REGISTER_DATE, 'YYYY-MM-DD') AS "COM_REGISTER_DATE"
+		     , USER_NICKNAME
+		     , COM_HIT
+		  FROM COMMUNITY C
+		LEFT JOIN MEMBER MB USING(USER_NO)
+		WHERE 
+		 <if test="condition == 'title'">
+		 	COM_TITLE LIKE '%' || #{searchword} || '%'
+		 </if>
+		 <if test="condition == 'content'">
+		 	COM_CONTENT LIKE '%' || #{searchword} || '%'
+		 </if>
+         <if test="condition == 'titleContent'">
+		 	COM_TITLE LIKE '%' || #{searchword} || '%' OR COM_CONTENT LIKE '%' || #{searchword} || '%'
+		 </if>
+		AND C.COM_STATUS = 'Y'
+		ORDER BY COM_NO DESC
+	</select>	
 	
 	<!-- 커뮤니티 게시글 등록 쿼리문 -->
 	<insert id="insertCommunity" parameterType="community">
 		INSERT INTO COMMUNITY (COM_NO
 						   , COM_TITLE
-					       , USER_NICKNAME)
+						   , COM_CONTENT
+					       , USER_NO)
 				   VALUES (SEQ_COM_NO.NEXTVAL
 				   		 , #{comTitle}
-				   		 , #{userNickname})
+				   		 , #{comContent}
+				   		 , #{userNo})
 	</insert>
 	
 	<!-- 커뮤니티 게시글 조회수 증가 쿼리문(관리자 + 회원) -->
@@ -69,13 +127,80 @@
 	<!-- 커뮤니티 게시글 상세조회 쿼리문(관리자 + 회원) -->
 	<select id="selectCommunity" parameterType="_int" resultMap="communityResultSet">
 		SELECT COM_NO
-				    , COM_TITLE
-					 , COM_CONTENT
-					 , TO_CHAR(NOTICE_REGISTER_DATE, 'YYYY-MM-DD') AS "NOTICE_REGISTER_DATE"
-					 , COM_HIT
-		FROM COMMUNITY
-		WHERE COM_NO = #{comNo}
+			         , COM_TITLE
+			         , COM_CONTENT
+			         , TO_CHAR(COM_REGISTER_DATE, 'YYYY-MM-DD') AS "COM_REGISTER_DATE"
+			         , USER_NICKNAME
+			         , COM_HIT
+		FROM COMMUNITY C
+		LEFT JOIN MEMBER MB USING(USER_NO)
+		WHERE C.COM_STATUS = 'Y'
+		  AND COM_NO = #{comNo}
+		ORDER BY COM_NO DESC
 	</select>
+
+	<!-- 커뮤니티 게시글 삭제 쿼리문 -->
+	<update id="deleteCommunity" parameterType="_int">
+		UPDATE COMMUNITY
+		   SET COM_STATUS = 'N'
+		 WHERE COM_NO = #{comNo}
+	</update>
+	
+	<!--  커뮤니티 게시글 수정 쿼리문 -->
+	<update id="updateCommunity" parameterType="community">
+		UPDATE COMMUNITY
+		   SET COM_TITLE = #{comTitle}
+		     , COM_CONTENT = #{comContent}
+		 WHERE COM_NO = #{comNo}
+	</update>
+	
+	<!-- 커뮤니티 게시글 신고 버튼 클릭시 신고 - 작성자: 황혜진  -->
+	<insert id="reportCommunity" parameterType="report">
+		INSERT INTO REPORT (REPORT_NO
+                          , COM_NO
+                          , USER_NO
+                          , REPORT_REASON
+                          , REPORT_DATE
+                          , REPORT_STATUS)
+               		VALUES (SEQ_REPORT_NO.NEXTVAL
+                          , #{form_comNo}
+                          , #{form_loginUserNo}
+                          , #{reportReason}
+                          , SYSDATE
+                          , 'N')
+	</insert>
+	
+	<!-- 커뮤니티 댓글 작성 쿼리문 - 작성자: 황혜진 -->
+	<insert id="insertReply">
+      INSERT INTO COMMUNITY_REPLY (COM_RPL_NO
+      			   , COM_NO
+                   , USER_NO
+                   , COM_RPL_CONTENT)
+               VALUES (SEQ_COM_RPL_NO.NEXTVAL
+                      , #{comNo}
+                      , #{userNo}
+                      , #{comRplContent})
+   </insert>
+   
+   <!-- 커뮤니티 댓글 조회 쿼리문 - 작성자: 황혜진 -->
+   	<select id="selectReplyList" parameterType="_int" resultMap="replyResultSet">
+		SELECT COM_RPL_NO
+			 , USER_NICKNAME
+			 , COM_RPL_CONTENT
+			 , TO_CHAR(COM_RPL_REGISTER_DATE, 'YYYY-MM-DD') AS "COM_RPL_REGISTER_DATE"
+		FROM COMMUNITY_REPLY
+		JOIN MEMBER M USING(USER_NO)
+		WHERE COM_RPL_STATUS = 'Y'
+		  AND COM_NO = #{cno}
+		ORDER BY COM_RPL_NO DESC
+	</select>
+	
+	<!-- 커뮤니티 댓글 삭제 쿼리문 - 작성자: 황혜진 -->
+	<update id="deleteReply" parameterType="_int">
+		UPDATE COMMUNITY_REPLY
+		   SET COM_RPL_STATUS = 'N'
+		 WHERE COM_RPL_NO = #{comRplNo}
+	</update>
 	
 	<!-- 커뮤니티 댓글 신고를 눌렀을 때 사용할 메소드 - 작성자: 수빈 -->
 	<update id="reportReply" parameterType="report">
@@ -92,5 +217,20 @@
                   , SYSDATE
                   , 'N')
 	</update>
-
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

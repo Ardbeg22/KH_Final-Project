@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.urfavoriteott.ufo.common.model.vo.PageInfo;
+import com.urfavoriteott.ufo.community.model.vo.Community;
 import com.urfavoriteott.ufo.contents.model.vo.Payment;
 import com.urfavoriteott.ufo.contents.model.vo.Review;
 import com.urfavoriteott.ufo.member.model.dao.MemberDao;
@@ -230,5 +231,52 @@ public class MemberServiceImpl implements MemberService {
 	public Payment payChecker(Member loginUser) {
 		return memberDao.payChecker(sqlSession, loginUser);
 	}
+	
+	/**
+	 * 마이페이지 커뮤니티 글 내역 게시글 개수를 구하는 메소드 - 작성자: 황혜진 
+	 */
+	@Override
+	public int selectMyCommunityListCount(int userNo) {
+		return memberDao.selectMyCommunityListCount(sqlSession, userNo);
+	}
 
+	/**
+	 * 마이페이지 커뮤니티 글 내역 전체 조회 - 작성자: 황혜진 
+	 */
+	@Override
+	public ArrayList<Community> selectMyCommunityList(PageInfo pi, int userNo) {
+		return memberDao.selectMyCommunityList(sqlSession, pi, userNo);
+	}
+	
+	/**
+	 * 마이페이지 커뮤니티 글 내역 중 선택된 글 삭제 - 작성자: 황혜진 
+	 */
+	@Override
+	public int deleteMyCommunity(int checkNum) {
+		return memberDao.deleteMyCommunity(sqlSession, checkNum);
+	}
+
+	/**
+	 * 마이페이지 커뮤니티 댓글 내역 게시글 개수를 구하는 메소드 - 작성자: 황혜진 
+	 */
+	@Override
+	public int selectMyCommunityReplyListCount(int userNo) {
+		return memberDao.selectMyCommunityReplyListCount(sqlSession, userNo);
+	}
+
+	/**
+	 * 마이페이지 커뮤니티 댓글 내역 전체 조회 - 작성자: 황혜진
+	 */
+	@Override
+	public ArrayList<Community> selectMyCommunityReplyList(PageInfo pi, int userNo) {
+		return memberDao.selectMyCommunityReplyList(sqlSession, pi, userNo);
+	}
+
+	/**
+	 * 마이 페이지 댓글 내역 중 선택된 댓글 삭제 - 작성자: 황혜진
+	 */
+	@Override
+	public int deleteMyCommunityReply(int checkNum) {
+		return memberDao.deleteMyCommunityReply(sqlSession, checkNum);
+	}
 }

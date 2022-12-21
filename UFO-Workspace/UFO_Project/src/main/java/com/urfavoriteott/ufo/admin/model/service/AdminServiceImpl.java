@@ -299,4 +299,68 @@ public class AdminServiceImpl implements AdminService {
 	public int resetReportedReply(int comRplNo) {
 		return adminDao.resetReportedReply(sqlSession, comRplNo);
 	}
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진
+	 */
+	@Override
+	public int reportedCommunityListCount() {
+		return adminDao.reportedCommunityListCount(sqlSession);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 조회 - 작성자 : 황혜진
+	 */
+	@Override
+	public ArrayList<Report> reportedCommunityList(PageInfo pi) {
+		return adminDao.reportedCommunityList(sqlSession, pi);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(REPORT_STATUS='Y') 하는 메소드 - 작성자: 황혜진 
+	 */
+	@Override
+	public int changeStatusReportedCommunity(int reportNo) {
+		return adminDao.changeStatusReportedCommunity(sqlSession, reportNo);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글을 삭제(COM_STATUS='N') 하는 메소드 - 작성자: 황혜진
+	 */
+	@Override
+	public int deleteReportedCommunity(int comNo) {
+		return adminDao.deleteReportedCommunity(sqlSession, comNo);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 개수 조회 - 작성자 : 황혜진
+	 */
+	@Override
+	public int processedCommunityListCount() {
+		return adminDao.processedCommunityListCount(sqlSession);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고 후 삭제 처리된 커뮤니티 게시글 조회 - 작성자 : 황혜진
+	 */
+	@Override
+	public ArrayList<Report> processedCommunityList(PageInfo pi) {
+		return adminDao.processedCommunityList(sqlSession, pi);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 게시글 되돌리기 (REPORT_STATUS='N') 메소드 - 작성자: 황혜진 
+	 */
+	@Override
+	public int resetStatusReportedCommunity(int reportNo) {
+		return adminDao.resetStatusReportedCommunity(sqlSession, reportNo);
+	}
+
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 게시글 삭제 상태 되돌리기 (COM_STATUS='Y') 메소드 - 작성자: 황혜진
+	 */
+	@Override
+	public int resetReportedCommunity(int comNo) {
+		return adminDao.resetReportedCommunity(sqlSession, comNo);
+	}
 }

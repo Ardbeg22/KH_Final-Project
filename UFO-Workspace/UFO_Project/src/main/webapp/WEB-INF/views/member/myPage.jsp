@@ -201,8 +201,8 @@
 		        <div><a href="">볼래요</a></div>
 		        <div><a href="myPayment.me">이용권 내역</a></div>       
 		        <div><a href="myComment.me">별점 및 코멘트 내역</a></div>
-		        <div><a href="">커뮤니티 글 내역</a></div>
-		        <div><a href="">커뮤니티 댓글 내역</a></div>
+		        <div><a href="myCommunityList.me">커뮤니티 글 내역</a></div>
+		        <div><a href="myCommunityReplyList.me">커뮤니티 댓글 내역</a></div>
 			</div>
         </div>
 

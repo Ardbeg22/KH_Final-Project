@@ -553,4 +553,101 @@ public class AdminController {
 		return result;
 		
 	}
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 전체 커뮤니티 게시글 조회 - 작성자 : 황혜진
+	 * @param currentPage
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("reportedCommunity.ad")
+	public String reportedCommunityList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model) {
+		
+		int listCount = adminService.reportedCommunityListCount();
+		
+		int pageLimit = 10;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList<Report> list = adminService.reportedCommunityList(pi);
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		
+		// System.out.println(list);
+		
+		return "admin/adminReportedCommunity";
+	}
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 커뮤니티 게시글 삭제(STATUS='N')  - 작성자: 황혜진 
+	 * @param reportNo
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="deleteReportedCommunity.ad", produces="application/json; charset=UTF-8")
+	public int deleteReportedCommunity(int reportNo, int comNo) {
+		
+		// System.out.println(reportNo);
+		// System.out.println(comNo);
+		
+		int result1 = adminService.changeStatusReportedCommunity(reportNo);
+		
+		int result2 = adminService.deleteReportedCommunity(comNo);
+		
+		int result = result1 * result2;
+		
+		// System.out.println(result);
+		
+		return result;
+	}
+	
+	/**
+	 * 관리자 페이지 신고 관리 - '처리된 글 보기' 버튼 클릭 시 게시글 조회 - 작성자 : 황혜진 
+	 * @param currentPage
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("processedCommunityList.ad")
+	public String processedCommunityList(@RequestParam(value="cpage", defaultValue="1") int currentPage, Model model) {
+		
+		int listCount = adminService.processedCommunityListCount();
+		
+		int pageLimit = 10;
+		int boardLimit = 10;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList<Report> list = adminService.processedCommunityList(pi);
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		
+		return "admin/adminProcessedCommunity";
+	}
+	
+	/**
+	 * 관리자 페이지 신고 관리 - 신고된 코멘트 되돌리기 (STATUS='Y') - 작성자: 황혜진 
+	 * @param reportNo
+	 * @param comNo
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="resetReportedCommunity.ad", produces="application/json; charset=UTF-8")
+	public int resetReportedCommunity(int reportNo, int comNo) {
+		
+		// System.out.println(reportNo);
+		// System.out.println(comNo);
+		
+		int result1 = adminService.resetStatusReportedCommunity(reportNo);
+		
+		int result2 = adminService.resetReportedCommunity(comNo);
+		
+		int result = result1 * result2;
+		
+		// System.out.println(result);
+		
+		return result;
+	}
 }

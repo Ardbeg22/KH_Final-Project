@@ -40,7 +40,7 @@
                     <a href="commentList.co">영화</a>
                 </li>
                 <li class="main_menu">
-                    <a href="#">커뮤니티</a>
+                    <a href="communityList.co">커뮤니티</a>
                 </li>
                 <li class="main_menu">
                     <a href="adminNoticeList.no">고객센터</a>

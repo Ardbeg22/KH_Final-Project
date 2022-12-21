@@ -20,6 +20,8 @@
 
 <style>
 
+	/* div { border: 1px solid #64FFDA; } */
+
 	#content_container {
 		margin-left : 8%;
 		margin-right : 8%;
@@ -90,22 +92,19 @@
     thead>tr { font-weight: bolder; font-size: medium; }
     
     .form-group { margin: auto;}
-	.input-group { margin-left: 50px; margin-top: 10px;}
 	
 	.table>tbody>tr {
         opacity: 0.7;
         cursor: pointer;
     }
-    
-    /* 페이징 처리 */
-	#pagingArea {
-	    margin-left : 670px;
-	}
+  
+	/* .community { height: auto; } */
+	
+
 
 	
 </style>
 </head>
-
 <body>
 
     <!-- 전체 영역 -->
@@ -121,171 +120,180 @@
         <!-- 컨텐츠 영역 (개별 구현 구역) -->
         <div id="content_container">
         
-        <table id="admin_profile">
-	        <tr>
-	            <td width="380" height="20"></td>
-	        </tr>
-	        <tr>
-	            <td width="380" style="font-size:50px; font-weight:900;">커뮤니티</td>
-	        </tr>
-	    </table>
-	    	
-	    	<!-- !!! 본인이 맡은 탭 div에 id="selected_tab" 붙어녛기 !!!-->
-         
-			<br><br><br><br><br>
+			<table id="admin_profile">
+				<tr>
+					<td width="380" height="20"></td>
+				</tr>
+				<tr>
+					<td width="380" style="font-size:50px; font-weight:900;">커뮤니티</td>
+				</tr>
+			</table>
+				
+			<!-- !!! 본인이 맡은 탭 div에 id="selected_tab" 붙어녛기 !!!-->
 			
-            <div class="community">
-                    <div id="community">
-                        <div id="communityBtn">
-                            <div class="form-group row">
-                            </div>
-                        </div>
-                        <div class="form-button" style="margin-left: 1460px;">
-                         <!-- 로그인 후 상태일 경우만 보여지는 글쓰기 버튼 -->
-            				<c:if test="${ not empty loginUser }">
-								<a href="communityEnrollForm.co" class="btn btn-info" style="color:white">글작성</a>
-						 	</c:if>
-                        </div>
+			<br><br><br><br><br>
+				
+			<div class="community">
+				<div id="community">
+					<div id="communityBtn"><div class="form-group row"></div></div>
+						
+					<div class="form-button" align="right">
+						<!-- 로그인 후 상태일 경우만 보여지는 글쓰기 버튼 -->
+						<c:if test="${ not empty loginUser }">
+							<a href="communityEnrollForm.co" class="btn btn-info" style="color:white">글작성</a>
+						</c:if>
+					</div>
 
-                        <div id="communityTable" style="margin-top:10px;">
-                            <table class="table">
-                                <thead>
-									<tr>
-										<td style=color:white;>글번호</td>
-										<td style=color:white;>글제목</td>
-										<td style=color:white;>등록일</td>
-										<td style=color:white;>작성자</td>
-										<td style=color:white;>조회수</td>
-									</tr>
-                                </thead>
-                               
-                                <tbody>
-                                	<c:choose>
-										<c:when test="${ empty list }">
-											<tr>
-	                                     		<td style=color:white; colspan="5">존재하는 게시글이 없습니다.</td>
-	                                     	</tr>
-	                                    </c:when>
-	                                    <c:otherwise>
-	                                    	<c:forEach var="c" items="${ list }">
-	                                    	<tr>
-	                                     		<td style=color:white;>${ c.comNo }</td>
-	                                     		<td style=color:white;>${ c.comTitle }</td>
-	                                     		<td style=color:white;>${ c.comRegisterDate }</td>
-	                                     		<td style=color:white;>${ c.userNickname }</td>
-	                                     		<td style=color:white;>${ c.comHit }</td>
-	                                     	</tr>
-	                                     	</c:forEach>
-	                                    </c:otherwise>
-	                                 </c:choose> 	                            	
-                                </tbody>
-								 </table>
-								 
-								 <script>
-					            	$(function() {
-					            		$("#communityTable>tbody>tr").click(function() {
-					            			
-					            			location.href = "communityDetail.co?cno=" + $(this).children().eq(0).text();
-					            		});
-					            	});
-            					</script>
-            
-            
-                             <!-- 페이징 처리 -->
-                    <nav id="paging" style="" aria-label="Page navigation example" >
-                        <ul class="pagination" style="justify-content: center;"> <!-- justify-content: center; : 페이징 가운데 정렬-->
-                          <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                              <span aria-hidden="true">&laquo;</span>
-                              <span class="sr-only">Previous</span>
-                            </a>
-                          </li>
-                          <li class="page-item"><a class="page-link" href="#">1</a></li>
-                          <li class="page-item"><a class="page-link" href="#">2</a></li>
-                          <li class="page-item"><a class="page-link" href="#">3</a></li>
-                          <li class="page-item"><a class="page-link" href="#">4</a></li> <!-- 해당 코드 복붙해서 이어붙이면 (5,6,7,8..) 페이지수 늘어남 -->
-                          <li class="page-item"><a class="page-link" href="#">5</a></li>
-                          <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                              <span aria-hidden="true">&raquo;</span>
-                              <span class="sr-only">Next</span>
-                            </a>
-                          </li>
-                        </ul>
-                        
-                         <form  id="1" action="" method="get" align="center" width="20px" style="display:inline-block;">
-                            <div id="selectForm" class="select">
-                                <select class="custom-select" name="condition">
-                                    <option value="title">제목</option>
-                                    <option value="content">내용</option>
-                                    <option value="titleContent">제목+내용</option>
-                                </select>
-                            </div>
-                        <div class="input-group" style="width: 200px; margin-right: 30px;">
-                             <input type="text" class="form-control" placeholder="검색어를 입력하세요">
-                             <div class="input-group-append">
-                               <button class="btn btn-secondary" type="button" style="background-color: #64FFDA; color: black;">
-                                 <i class="fa fa-search"></i>
-                               </button>
-                             </div>
-                        </div>
-                        </form>
-                      </nav>
-                    <br><br><br><br>   
+					<div id="communityTable" style="margin-top:10px;">
+						<table class="table">
+							<thead>
+								<tr>
+									<td style=color:white;>글번호</td>
+									<td style=color:white;>글제목</td>
+									<td style=color:white;>등록일</td>
+									<td style=color:white;>작성자</td>
+									<td style=color:white;>조회수</td>
+								</tr>
+							</thead>
+							
+							<tbody>
+								<c:choose>
+									<c:when test="${ empty list }">
+										<tr>
+											<td style=color:white; colspan="5">존재하는 게시글이 없습니다.</td>
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<c:forEach var="c" items="${ list }">
+										<tr>
+											<td style=color:white;>${ c.comNo }</td>
+											<td style=color:white;>${ c.comTitle }</td>
+											<td style=color:white;>${ c.comRegisterDate }</td>
+											<td style=color:white;>${ c.userNickname }</td>
+											<td style=color:white;>${ c.comHit }</td>
+										</tr>
+										</c:forEach>
+									</c:otherwise>
+									</c:choose> 	                            	
+							</tbody>
+						</table>
+								
+						<c:if test="${ not empty list }">
+							<script>
+								$(function() {
+									$(".table>tbody>tr").click(function() {
+										
+										location.href = "communityDetail.co?cno=" + $(this).children().eq(0).text();
+									});
+								});
+							</script>
+						</c:if>     
+					</div>  
+				
+					<!-- 페이징 처리 시작 -->
 					
-					<!--
-		            <div id="pagingArea">
-		                <ul class="pagination">
-		                   <c:choose>
-		                      <c:when test="${ pi.currentPage eq 1 }">
-		                         <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-		                      </c:when>
-		                      <c:otherwise>
-		                         <li class="page-item"><a class="page-link" href="adminNoticeList.no?cpage=${ pi.currentPage-1 }">Previous</a></li>
-		                      </c:otherwise>
-		                   </c:choose>
-		                    
-		                    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-		                       <li class="page-item"><a class="page-link" href="adminNoticeList.no?cpage=${p}">${p}</a></li>
-		                    </c:forEach>
-		                    
-		                    <c:choose>
-		                      <c:when test="${ pi.currentPage eq pi.maxPage }">
-		                         <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-		                      </c:when>
-		                      <c:otherwise>
-		                         <li class="page-item"><a class="page-link" href="adminNoticeList.no?cpage=${ pi.currentPage+1 }">Next</a></li>
-		                      </c:otherwise>
-		                   </c:choose>
-		                </ul>
-		            </div>
-                        
-                        	<c:if test="${ not empty list }">
-                        	<script>
-                        		$(function() {
-                        			
-                        			$(".table>tbody>tr").click(function() {
-                        				
-                        				location.href = "adminNoticeDetail.no?nno=" + $(this).children().eq(0).text();
- 
-                        			});
-                        		});
-                        	</script>
-                            </c:if>                                      
-                        </div>
-                    </div>
-					-->
-           </div>
-        </div>
+					<br><br><br><br>   
+					<div align="center">	
+						<div id="pagingArea" style="width: 200px;">
+							<ul class="pagination">
+							   <c:choose>
+								  <c:when test="${ pi.currentPage eq 1 }">
+									 <c:choose>
+										   <c:when test="${ empty condition }">
+											   <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+										   </c:when>
+										   <c:otherwise>
+											   <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+										   </c:otherwise>
+										</c:choose>
+								  </c:when>
+								  <c:otherwise>
+									 <c:choose>
+										<c:when test="${ empty condition }">
+											<li class="page-item"><a class="page-link" href="communityList.co?cpage=${ pi.currentPage - 1 }">Previous</a></li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"><a class="page-link" href="search.co?cpage=${ pi.currentPage - 1 }&condition=${ condition }&searchword=${ searchword }">Previous</a></li>
+										</c:otherwise>
+									 </c:choose>
+								  </c:otherwise>
+							   </c:choose>
+								
+								<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+									<c:choose>
+										<c:when test="${ empty condition }">
+											<li class="page-item"><a class="page-link" href="communityList.co?cpage=${ p }">${ p }</a></li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"><a class="page-link" href="search.co?cpage=${ p }&condition=${ condition }&searchword=${ searchword }">${ p }</a></li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								
+								<c:choose>
+								  <c:when test="${ pi.currentPage eq pi.maxPage }">
+									 <c:choose>
+										<c:when test="${ empty keyword }">
+											<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+										</c:otherwise>
+									 </c:choose>
+								  </c:when>
+								  <c:otherwise>
+									 <c:choose>
+										<c:when test="${ empty keyword }">
+											<li class="page-item"><a class="page-link" href="communityList.co?cpage=${ pi.currentPage + 1 }">Next</a></li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"><a class="page-link" href="search.co?cpage=${ pi.currentPage + 1 }&condition=${ condition }&searchword=${ searchword }">Next</a></li>
+										</c:otherwise>
+									 </c:choose>
+								  </c:otherwise>
+							   </c:choose>
+							</ul>
+						</div>
+					</div>
+					<!-- 페이징 처리 끝 -->
+
+					<div style="float: left; margin-top: -53px" >
+						<div style=" float: left;">
+							<form  id="1" action="search.co" method="get">
+								<div id="selectForm" class="select" style="width: 100px; float: left;" align="center">
+									<div id="selectForm" class="select">
+										<div style="width: 100px">
+											<select class="custom-select" name="condition">
+												<option value="title">제목</option>
+												<option value="content">내용</option>
+												<option value="titleContent">제목+내용</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div style="width: 300px; float: left;">
+									<div class="input-group">
+										<input type="text" name="searchword" value="${ searchword }" class="form-control" placeholder="검색어를 입력하세요">
+										<div class="input-group-append">
+											<button class="btn btn-secondary" type="submit" style="background-color: #64FFDA; color: black;">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
 		<!-- 푸터 영역 -->
         <jsp:include page="../common/footer.jsp" />
-
     </div>
     
-    
-
-  
-    
-
 </body>
 </html>
